@@ -3,8 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-!*.h
-!*.cpp
+*.sln
+*.vcxproj
 
 # User-specific files
 *.rsuser
@@ -364,3 +364,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/labyrinths/labyrinths.vcxproj.filters
+/labyrinths/labyrinths.vcxproj
