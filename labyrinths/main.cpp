@@ -3,6 +3,7 @@
 #include "BinaryTree.h"
 #include "Sidewinder.h"
 #include "AldousBroder.h"
+#include "Leaf.h"
 
 int main()
 {
@@ -11,4 +12,4 @@ int main()
 
 	auto algo = AldousBroder(roomSize, seed);
 	std::vector<bool> list = algo.Algorithm();
-}
+} 
