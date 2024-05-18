@@ -3,13 +3,15 @@
 #include "BinaryTree.h"
 #include "Sidewinder.h"
 #include "AldousBroder.h"
-#include "Leaf.h"
+#include "BSPTree.h"
 
 int main()
 {
-	unsigned int roomSize = 3;
+	unsigned int roomSize = 20;
 	unsigned int seed = 5;
 
-	auto algo = AldousBroder(roomSize, seed);
+	auto algo = BSPTree(roomSize, seed);
 	std::vector<bool> list = algo.Algorithm();
+
+
 } 

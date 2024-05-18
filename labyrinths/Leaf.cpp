@@ -14,7 +14,7 @@ bool Leaf::Split() {
 
 	if (maxH <= MIN_LEAF_SIZE) return false;
 
-	dis.param(std::uniform_int_distribution<int>::param_type(MIN_LEAF_SIZE, maxH));
+	dis.param(std::uniform_int_distribution<int>::param_type(MIN_LEAF_SIZE, std::max(MIN_LEAF_SIZE, maxH - TILESIZE)));
 	int split = dis(rng);
 
 	if (splitH) {
@@ -33,23 +33,23 @@ bool Leaf::Split() {
 	return true;
 };
 
-void Leaf::CreateRooms() {
+void Leaf::CreateRooms(int roomSize) {
 	if (leftChild != NULL || rightChild != NULL) {
-		if (leftChild != NULL) leftChild->CreateRooms();
-		if (rightChild != NULL) rightChild->CreateRooms();
+		if (leftChild != NULL) leftChild->CreateRooms(roomSize);
+		if (rightChild != NULL) rightChild->CreateRooms(roomSize);
 	}
 	else {
 		int roomWidth, roomHeight, roomPosX, roomPosY;
-		
-		dis.param(std::uniform_int_distribution<int>::param_type(TILESIZE, width - 2));
-		roomWidth = dis(rng);
-		dis.param(std::uniform_int_distribution<int>::param_type(TILESIZE, height - 2));
-		roomHeight = dis(rng);
-		dis.param(std::uniform_int_distribution<int>::param_type(1, width - roomWidth - 1));
+		dis.param(std::uniform_int_distribution<int>::param_type(TILESIZE, std::max(TILESIZE, width - 2)));
+		roomWidth = dis(rng) - 1;
+		dis.param(std::uniform_int_distribution<int>::param_type(TILESIZE, std::max(TILESIZE, height - 2)));
+		roomHeight = dis(rng) - 1;
+		dis.param(std::uniform_int_distribution<int>::param_type(1, std::max(1, width - roomWidth - 1)));
 		roomPosX = x + dis(rng);
-		dis.param(std::uniform_int_distribution<int>::param_type(1, height - roomHeight - 1));
+		dis.param(std::uniform_int_distribution<int>::param_type(1, std::max(1, height - roomHeight - 1)));
 		roomPosY = y + dis(rng);
 
-		room = Rectangle(roomPosX, roomPosY, roomWidth, roomHeight);
+		if ((roomPosX + roomWidth) < roomSize && (roomPosY + roomHeight) < roomSize)
+			room = Rectangle(roomPosX, roomPosY, roomPosX + roomWidth, roomPosY + roomHeight);
 	}
 }

@@ -23,8 +23,13 @@ public:
 	std::vector<int> halls;
 
 	Leaf() : x(0), y(0), width(0), height(0) {};
-	Leaf(int x, int y, int width, int height, std::mt19937 generator) : x(x), y(y), width(width), height(height), rng(generator) {};
+	Leaf(int x, int y, int width, int height, std::mt19937 generator) : x(x), y(y), width(width), height(height), rng(generator), dis(x, x) {};
+	~Leaf() {
+		delete leftChild;
+		delete rightChild;
+	}
 
 	bool Split();
-	void CreateRooms();
+	void CreateRooms(int roomSize);
+
 };
