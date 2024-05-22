@@ -14,9 +14,7 @@ bool Leaf::Split() {
 
 	if (maxH <= MIN_LEAF_SIZE) return false;
 
-	dis.param(std::uniform_int_distribution<int>::param_type(MIN_LEAF_SIZE, std::max(MIN_LEAF_SIZE, maxH - TILESIZE)));
-	int split = dis(rng);
-
+	int split = Randomize(rng, MIN_LEAF_SIZE, std::max(MIN_LEAF_SIZE, maxH - MIN_LEAF_SIZE));
 	
 	if (splitH) {
 		if (height - split < MIN_LEAF_SIZE) return false;
@@ -43,16 +41,40 @@ void Leaf::CreateRooms(int roomSize) {
 	}
 	else {
 		int roomWidth, roomHeight, roomPosX, roomPosY;
-		dis.param(std::uniform_int_distribution<int>::param_type(TILESIZE, std::max(TILESIZE, width - 2)));
-		roomWidth = dis(rng) - 1;
-		dis.param(std::uniform_int_distribution<int>::param_type(TILESIZE, std::max(TILESIZE, height - 2)));
-		roomHeight = dis(rng) - 1;
-		dis.param(std::uniform_int_distribution<int>::param_type(1, std::max(1, width - roomWidth - 1)));
-		roomPosX = x + dis(rng);
-		dis.param(std::uniform_int_distribution<int>::param_type(1, std::max(1, height - roomHeight - 1)));
-		roomPosY = y + dis(rng);
+
+		roomWidth = Randomize(rng, TILESIZE, std::max(TILESIZE, width - 2)) - 1; 
+		roomHeight = Randomize(rng, TILESIZE, std::max(TILESIZE, height - 2)) - 1;
+		roomPosX = x + Randomize(rng, 1, std::max(1, width - roomWidth - 1));
+		roomPosY = y + Randomize(rng, 1, std::max(1, height - roomHeight - 1));
 
 		if ((roomPosX + roomWidth) < roomSize && (roomPosY + roomHeight) < roomSize)
 			room = Rectangle(roomPosX, roomPosY, roomPosX + roomWidth, roomPosY + roomHeight);
 	}
+}
+
+Rectangle Leaf::GetRoom() {
+	Rectangle empty;
+	if (room.Exists()) return room;
+	else {
+		Rectangle leftRoom;
+		Rectangle rightRoom;
+
+		if (leftChild != NULL)
+			leftRoom = leftChild->GetRoom();
+		if (rightChild != NULL)
+			rightRoom = rightChild->GetRoom();
+
+		if (!leftRoom.Exists() && !rightRoom.Exists()) return empty;
+
+		if (!leftRoom.Exists()) return rightRoom;
+		if (!rightRoom.Exists()) return leftRoom;
+
+		if (rng() % 2 == 1)
+			return leftRoom;
+		else return rightRoom;
+	}
+}
+
+void Leaf::CreateHall(Rectangle& left, Rectangle& right) {
+
 }

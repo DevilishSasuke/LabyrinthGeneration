@@ -15,11 +15,13 @@ int main()
 	// roomsize = 12, seed = 99;
 	// roomsize = 11, seed = 98;
 
-	auto algo = BSPTree(30, 99);
-	std::vector<bool> list = algo.Algorithm();
-	std::cout << std::endl;
+	
+	
 	
 	for (int i = 0; i < 100; i++) {
+		auto algo = BSPTree(30, i);
+		std::vector<bool> list = algo.Algorithm();
+		std::cout << std::endl;
 	}
 
 	/*auto algo = BSPTree(20, 5);
