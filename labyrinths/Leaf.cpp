@@ -17,13 +17,16 @@ bool Leaf::Split() {
 	dis.param(std::uniform_int_distribution<int>::param_type(MIN_LEAF_SIZE, std::max(MIN_LEAF_SIZE, maxH - TILESIZE)));
 	int split = dis(rng);
 
+	
 	if (splitH) {
+		if (height - split < MIN_LEAF_SIZE) return false;
 		leftChild = new Leaf(x, y, width, split, rng);
 		maxH = rng() % 100 + 100;
 		for (int i = 0; i < maxH; ++i) rng();
 		rightChild = new Leaf(x, y + split, width, height - split, rng);
 	}
 	else {
+		if (width - split < MIN_LEAF_SIZE) return false;
 		leftChild = new Leaf(x, y, split, height, rng);
 		maxH = rng() % 100 + 100;
 		for (int i = 0; i < maxH; ++i) rng();
