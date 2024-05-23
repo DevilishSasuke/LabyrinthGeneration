@@ -31,10 +31,4 @@ public:
 	void CreateRooms(int roomSize);
 	Rectangle GetRoom();
 	void CreateHall(Rectangle& left, Rectangle& right);
-
-private:
-	int Randomize(std::mt19937& gen, int min, int max) {
-		if (max < min) max = min;
-		return min + gen() % (max - min + 1);
-	}
 };
