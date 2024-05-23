@@ -38,17 +38,23 @@ void Leaf::CreateRooms(int roomSize) {
 	if (leftChild != NULL || rightChild != NULL) {
 		if (leftChild != NULL) leftChild->CreateRooms(roomSize);
 		if (rightChild != NULL) rightChild->CreateRooms(roomSize);
+
+		if (leftChild != NULL && rightChild != NULL) {
+			Rectangle lRoom = leftChild->GetRoom();
+			Rectangle rRoom = rightChild->GetRoom();
+			CreateHall(lRoom, rRoom);
+		}
 	}
 	else {
 		int roomWidth, roomHeight, roomPosX, roomPosY;
 
-		roomWidth = Randomize(rng, TILESIZE, std::max(TILESIZE, width - 2)) - 1; 
-		roomHeight = Randomize(rng, TILESIZE, std::max(TILESIZE, height - 2)) - 1;
-		roomPosX = x + Randomize(rng, 1, std::max(1, width - roomWidth - 1));
-		roomPosY = y + Randomize(rng, 1, std::max(1, height - roomHeight - 1));
+		roomWidth = Randomize(rng, TILESIZE, std::max(TILESIZE, width - 2));
+		roomHeight = Randomize(rng, TILESIZE, std::max(TILESIZE, height - 2));
+		roomPosX = x + Randomize(rng, 1, std::max(1, width - roomWidth));
+		roomPosY = y + Randomize(rng, 1, std::max(1, height - roomHeight));
 
-		if ((roomPosX + roomWidth) < roomSize && (roomPosY + roomHeight) < roomSize)
-			room = Rectangle(roomPosX, roomPosY, roomPosX + roomWidth, roomPosY + roomHeight);
+		if ((roomPosX + roomWidth) <= roomSize && (roomPosY + roomHeight) <= roomSize)
+			room = Rectangle(roomPosX, roomPosY, roomWidth, roomHeight);
 	}
 }
 
@@ -76,5 +82,66 @@ Rectangle Leaf::GetRoom() {
 }
 
 void Leaf::CreateHall(Rectangle& left, Rectangle& right) {
+	Point p1 = Point(Randomize(rng, left.x1 + 1, left.x2 - 2), Randomize(rng, left.y1 + 1, left.y2 - 2));
+	Point p2 = Point(Randomize(rng, right.x1 + 1, right.x2 - 2), Randomize(rng, right.y1 + 1, right.y2 - 2));
 
+	int w = p2.x - p1.x;
+	int h = p2.y - p1.y;
+
+	if (w < 0) {
+		if (h < 0) {
+			if (rng() % 2 == 1) {
+				halls.push_back(new Rectangle(p2.x, p1.y, abs(w), 1));
+				halls.push_back(new Rectangle(p2.x, p2.y, 1, abs(h)));
+			}
+			else {
+				halls.push_back(new Rectangle(p2.x, p1.y, abs(w), 1));
+				halls.push_back(new Rectangle(p1.x, p2.y, 1, abs(h)));
+			}
+		}
+		else if (h > 0) {
+			if (rng() % 2 == 1) {
+				halls.push_back(new Rectangle(p2.x, p1.y, abs(w), 1));
+				halls.push_back(new Rectangle(p2.x, p1.y, 1, abs(h)));
+			}
+			else {
+				halls.push_back(new Rectangle(p2.x, p2.y, abs(w), 1));
+				halls.push_back(new Rectangle(p1.x, p1.y, 1, abs(h)));
+			}
+		}
+		else {
+			halls.push_back(new Rectangle(p2.x, p2.y, abs(w), 1));
+		}
+	}
+	else if (w > 0) {
+		if (h < 0) {
+			if (rng() % 2 == 1) {
+				halls.push_back(new Rectangle(p1.x, p2.y, abs(w), 1));
+				halls.push_back(new Rectangle(p1.x, p2.y, 1, abs(h)));
+			}
+			else {
+				halls.push_back(new Rectangle(p1.x, p1.y, abs(w), 1));
+				halls.push_back(new Rectangle(p2.x, p2.y, 1, abs(h)));
+			}
+		}
+		else if (h > 0) {
+			if (rng() % 2 == 1) {
+				halls.push_back(new Rectangle(p1.x, p1.y, abs(w), 1));
+				halls.push_back(new Rectangle(p2.x, p1.y, 1, abs(h)));
+			}
+			else {
+				halls.push_back(new Rectangle(p1.x, p2.y, abs(w), 1));
+				halls.push_back(new Rectangle(p1.x, p1.y, 1, abs(h)));
+			}
+		}
+		else {
+			halls.push_back(new Rectangle(p1.x, p1.y, abs(w), 1));
+		}
+	}
+	else {
+		if (h < 0)
+			halls.push_back(new Rectangle(p2.x, p2.y, 1, abs(h)));
+		else if (h > 0)
+			halls.push_back(new Rectangle(p1.x, p1.y, 1, abs(h)));
+	}
 }

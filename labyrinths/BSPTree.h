@@ -26,10 +26,19 @@ public:
 					vec[i][room.x2] = true;
 				}
 			}
+			if (leaf->halls.size() > 0) {
+				for (Rectangle* hall : leaf->halls) {
+					for (int i = hall->x1; i <= hall->x2; ++i) {
+						for (int j = hall->y1; j <= hall->y2; ++j) {
+							vec[j][i] = true;
+						}
+					}
+				}
+			}
 		}
 
 		for (std::vector<bool> part : vec) {
-			for (bool flag : part) std::cout << flag << " ";
+			for (bool flag : part) std::cout << (flag ? "=" : "0") << " ";
 			std::cout << std::endl;
 		}
 	}

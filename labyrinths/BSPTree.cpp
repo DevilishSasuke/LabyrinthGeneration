@@ -35,6 +35,8 @@ std::vector<Leaf*>& BSPTree::CreateLeafs() {
 
 	root.CreateRooms(roomSize);
 	ShowRooms(leafs);
+//	ShowWalls(leafs);
+//	ShowFloor(leafs);
 	return leafs;
 }
 

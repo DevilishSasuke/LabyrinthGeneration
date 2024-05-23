@@ -2,10 +2,9 @@
 
 constexpr int TILESIZE = 3;
 
-#include <vector>
-#include <random>
-#include <iostream>
 #include "Rectangle.h"
+#include "Point.h"
+#include "Utilities.h"
 
 
 class Leaf {
@@ -35,7 +34,7 @@ public:
 
 private:
 	int Randomize(std::mt19937& gen, int min, int max) {
+		if (max < min) max = min;
 		return min + gen() % (max - min + 1);
 	}
-
 };

@@ -22,6 +22,7 @@ int main()
 		auto algo = BSPTree(30, i);
 		std::vector<bool> list = algo.Algorithm();
 		std::cout << std::endl;
+		return 0;
 	}
 
 	/*auto algo = BSPTree(20, 5);
