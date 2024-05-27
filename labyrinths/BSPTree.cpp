@@ -34,13 +34,18 @@ std::vector<Leaf*>& BSPTree::CreateLeafs() {
 	}
 
 	root.CreateRooms(roomSize);
-	ShowWalls(leafs);
-	ShowFloor(leafs);
+	auto halls = GetHalls(leafs);
+	ShowPositions(halls);
+	std::cout << std::endl;
+	auto walls = GetWalls(leafs);
+	ShowPositions(walls);
 	return leafs;
 }
 
-void BSPTree::ShowWalls(std::vector<Leaf*>& leafs) {
+std::vector<std::vector<bool>> BSPTree::GetWalls(std::vector<Leaf*>& leafs) {
 	std::vector<std::vector<bool>> vec(roomSize, std::vector<bool>(roomSize));
+
+	std::vector<std::vector<bool>> hallsVec = GetHalls(leafs);
 
 	Rectangle room;
 	for (Leaf* leaf : leafs) {
@@ -57,13 +62,16 @@ void BSPTree::ShowWalls(std::vector<Leaf*>& leafs) {
 		}
 	}
 
-	for (std::vector<bool> part : vec) {
-		for (bool flag : part) std::cout << (flag ? "=" : "0") << " ";
-		std::cout << std::endl;
-	}
+	for (int i = 0; i < roomSize; ++i)
+		for (int j = 0; j < roomSize; ++j)
+			if (vec[i][j] && hallsVec[i][j]) vec[i][j] = false;
+
+	return vec;
 }
 
-void BSPTree::ShowFloor(std::vector<Leaf*>& leafs) {
+
+
+std::vector<std::vector<bool>> BSPTree::GetFloor(std::vector<Leaf*>& leafs) {
 	std::vector<std::vector<bool>> vec(roomSize, std::vector<bool>(roomSize));
 
 	Rectangle room;
@@ -74,6 +82,16 @@ void BSPTree::ShowFloor(std::vector<Leaf*>& leafs) {
 				for (int j = room.y1; j <= room.y2; ++j)
 					vec[j][i] = true;
 		}
+	}
+
+	return vec;
+}
+
+std::vector<std::vector<bool>> BSPTree::GetHalls(std::vector<Leaf*>& leafs) {
+	std::vector<std::vector<bool>> vec(roomSize, std::vector<bool>(roomSize));
+
+	Rectangle room;
+	for (Leaf* leaf : leafs) {
 		if (leaf->halls.size() > 0) {
 			for (Rectangle* hall : leaf->halls)
 				for (int i = hall->x1; i <= hall->x2; ++i)
@@ -82,6 +100,10 @@ void BSPTree::ShowFloor(std::vector<Leaf*>& leafs) {
 		}
 	}
 
+	return vec;
+}
+
+void BSPTree::ShowPositions(std::vector<std::vector<bool>>& vec) {
 	for (std::vector<bool> part : vec) {
 		for (bool flag : part) std::cout << (flag ? "=" : "0") << " ";
 		std::cout << std::endl;

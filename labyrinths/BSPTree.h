@@ -10,9 +10,16 @@ public:
 	virtual std::vector<bool>& Algorithm() override;
 	std::vector<Leaf*>& CreateLeafs();
 
-	// Show walls that need to be placed
-	void ShowWalls(std::vector<Leaf*>& leafs);
+	// Collect walls that need to be placed
+	// walls that cross halls deleted
+	std::vector<std::vector<bool>> GetWalls(std::vector<Leaf*>& leafs);
 
-	// Show floors that need to be placed
-	void ShowFloor(std::vector<Leaf*>& leafs);
+	// Collect room floors that need to be placed
+	std::vector<std::vector<bool>> GetFloor(std::vector<Leaf*>& leafs);
+
+	// Collect halls positions
+	std::vector<std::vector<bool>> GetHalls(std::vector<Leaf*>& leafs);
+
+	// Show scheme of objects that need to be placed
+	void ShowPositions(std::vector<std::vector<bool>>& vec);
 };
