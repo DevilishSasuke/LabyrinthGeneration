@@ -1,18 +1,15 @@
 #include "BSPTree.h"
 
 std::vector<bool>& BSPTree::Algorithm() {
-	auto leafs = CreateLeafs();
-
-	resultGraph = GetFloor(leafs);
+	CreateLeafs();
+	resultGraph = GetFloor();
 
 	return resultGraph;
 }
 
-std::vector<Leaf*>& BSPTree::CreateLeafs() {
+void BSPTree::CreateLeafs() {
 	int vectorSize = 0, vectorCapacity = 150;
 	const int MAX_LEAF_SIZE = 5;
-
-	std::vector<Leaf*> leafs;
 	Leaf root = Leaf(0, 0, roomSize, roomSize, rng);
 
 	bool splited = true;
@@ -36,10 +33,9 @@ std::vector<Leaf*>& BSPTree::CreateLeafs() {
 	}
 
 	root.CreateRooms(roomSize);
-	return leafs;
 }
 
-std::vector<bool> BSPTree::GetFloor(std::vector<Leaf*>& leafs) {
+std::vector<bool> BSPTree::GetFloor() {
 	std::vector<bool> vec(roomSize * roomSize);
 
 	Rectangle room;
