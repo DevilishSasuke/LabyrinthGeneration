@@ -15,7 +15,7 @@ public:
 	std::vector<std::vector<bool>> GetWalls(std::vector<Leaf*>& leafs);
 
 	// Collect room floors that need to be placed
-	std::vector<std::vector<bool>> GetFloor(std::vector<Leaf*>& leafs);
+	std::vector<bool> GetFloor(std::vector<Leaf*>& leafs);
 
 	// Collect halls positions
 	std::vector<std::vector<bool>> GetHalls(std::vector<Leaf*>& leafs);
